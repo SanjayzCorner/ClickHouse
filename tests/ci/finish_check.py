@@ -4,7 +4,7 @@ import sys
 
 from github import Github
 
-from ci_config import StatusNames
+from ci_config import CI
 from commit_status_helper import (
     get_commit,
     get_commit_filtered_statuses,
@@ -59,7 +59,7 @@ def main():
                 can_set_green_mergeable_status=True,
             )
 
-        ci_running_statuses = [s for s in statuses if s.context == StatusNames.CI]
+        ci_running_statuses = [s for s in statuses if s.context == CI.StatusNames.CI]
         if not ci_running_statuses:
             return
         # Take the latest status
@@ -68,11 +68,11 @@ def main():
         has_failure = False
         has_pending = False
         for status in statuses:
-            if status.context in (StatusNames.MERGEABLE, StatusNames.CI):
+            if status.context in (CI.StatusNames.MERGEABLE, CI.StatusNames.CI):
                 # do not account these statuses
                 continue
             if status.state == PENDING:
-                if status.context == StatusNames.SYNC:
+                if status.context == CI.StatusNames.SYNC:
                     # do not account sync status if pending - it's a different WF
                     continue
                 has_pending = True
@@ -94,7 +94,7 @@ def main():
                 ci_state,
                 ci_status.target_url,
                 "All checks finished",
-                StatusNames.CI,
+                CI.StatusNames.CI,
                 pr_info,
                 dump_to_file=True,
             )
