@@ -752,7 +752,7 @@ class SettingsRandomizer:
         "prefer_localhost_replica": lambda: random.randint(0, 1),
         "max_block_size": lambda: random.randint(8000, 100000),
         "max_joined_block_size_rows": lambda: random.randint(8000, 100000),
-        "max_threads": lambda: random.randint(1, 4),
+        "max_threads": lambda: random.randint(1, 3),
         "optimize_append_index": lambda: random.randint(0, 1),
         "optimize_if_chain_to_multiif": lambda: random.randint(0, 1),
         "optimize_if_transform_strings_to_enum": lambda: random.randint(0, 1),
@@ -2755,6 +2755,7 @@ def main(args):
                     f"{get_db_engine(args, db_name)}",
                     settings=get_create_database_settings(args, None),
                 )
+                break
             except HTTPError as e:
                 total_time = (datetime.now() - start_time).total_seconds()
                 if not need_retry(args, e.message, e.message, total_time):
