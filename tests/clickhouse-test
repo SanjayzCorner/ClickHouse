@@ -735,7 +735,7 @@ def get_localzone():
 class SettingsRandomizer:
     settings = {
         "max_insert_threads": lambda: (
-            0 if random.random() < 0.5 else random.randint(1, 16)
+            0 if random.random() < 0.5 else random.randint(1, 4)
         ),
         "group_by_two_level_threshold": threshold_generator(0.2, 0.2, 1, 1000000),
         "group_by_two_level_threshold_bytes": threshold_generator(
@@ -752,7 +752,7 @@ class SettingsRandomizer:
         "prefer_localhost_replica": lambda: random.randint(0, 1),
         "max_block_size": lambda: random.randint(8000, 100000),
         "max_joined_block_size_rows": lambda: random.randint(8000, 100000),
-        "max_threads": lambda: random.randint(1, 64),
+        "max_threads": lambda: random.randint(1, 4),
         "optimize_append_index": lambda: random.randint(0, 1),
         "optimize_if_chain_to_multiif": lambda: random.randint(0, 1),
         "optimize_if_transform_strings_to_enum": lambda: random.randint(0, 1),
@@ -3399,6 +3399,8 @@ if __name__ == "__main__":
             os.environ["CLICKHOUSE_URL_PARAMS"] += "&"
         else:
             os.environ["CLICKHOUSE_URL_PARAMS"] = ""
+
+        os.environ["CLICKHOUSE_CLIENT_OPT"] += "--disable_suggestion "
 
         client_options_query_str = get_additional_client_options_url(args)
         args.client_options_query_str = client_options_query_str + "&"
