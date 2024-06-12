@@ -8,18 +8,18 @@ CREATE DATABASE dict_db_01225_2 ENGINE=Ordinary;    -- Different internal dictio
 CREATE DATABASE dict_db_01225_dictionary_2 Engine=Dictionary;
 
 CREATE TABLE dict_db_01225_2.dict_data (key UInt64, val UInt64) Engine=Memory();
-CREATE DICTIONARY dict_db_01225.dict
+CREATE DICTIONARY dict_db_01225_2.dict
 (
   key UInt64 DEFAULT 0,
   val UInt64 DEFAULT 10
 )
 PRIMARY KEY key
-SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict_data' PASSWORD '' DB 'dict_db_01225'))
+SOURCE(CLICKHOUSE(HOST 'localhost' PORT tcpPort() USER 'default' TABLE 'dict_data' PASSWORD '' DB 'dict_db_01225_2'))
 LIFETIME(MIN 0 MAX 0)
 LAYOUT(FLAT());
 
-SHOW CREATE TABLE dict_db_01225_dictionary_2.`dict_db_01225.dict` FORMAT TSVRaw;
-SHOW CREATE TABLE dict_db_01225_dictionary_2.`dict_db_01225.no_such_dict`; -- { serverError CANNOT_GET_CREATE_DICTIONARY_QUERY }
+SHOW CREATE TABLE dict_db_01225_dictionary_2.`dict_db_01225_2.dict` FORMAT TSVRaw;
+SHOW CREATE TABLE dict_db_01225_dictionary_2.`dict_db_01225_2.no_such_dict`; -- { serverError CANNOT_GET_CREATE_DICTIONARY_QUERY }
 
 DROP DATABASE dict_db_01225_2;
 DROP DATABASE dict_db_01225_dictionary_2;

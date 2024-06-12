@@ -1,3 +1,5 @@
+set allow_deprecated_syntax_for_merge_tree=1;
+
 DROP TABLE IF EXISTS truncate_test_log;
 DROP TABLE IF EXISTS truncate_test_memory;
 DROP TABLE IF EXISTS truncate_test_tiny_log;
