@@ -1,5 +1,3 @@
--- Tags: no-parallel
-
 DROP DATABASE IF EXISTS truncate_test;
 
 CREATE DATABASE IF NOT EXISTS truncate_test;

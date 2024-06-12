@@ -1,5 +1,3 @@
--- Tags: no-parallel
-
 SET send_logs_level = 'fatal';
 
 DROP DATABASE IF EXISTS dict_db_01224;
