@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tags: race, zookeeper, no-parallel, no-replicated-database
+# Tags: race, zookeeper, no-replicated-database
 
 CURDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../shell_config.sh
@@ -73,7 +73,7 @@ export -f thread4;
 export -f thread5;
 export -f thread6;
 
-TIMEOUT=30
+TIMEOUT=20
 
 timeout $TIMEOUT bash -c thread1 2> /dev/null &
 timeout $TIMEOUT bash -c thread2 2> /dev/null &

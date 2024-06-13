@@ -19,7 +19,7 @@ function create_db()
         "create database if not exists ${CLICKHOUSE_DATABASE}_repl_01111_$SUFFIX engine=Replicated('/test/01111/$CLICKHOUSE_TEST_ZOOKEEPER_PREFIX', '$SHARD', '$REPLICA')" \
          2>&1| grep -Fa "Exception: " | grep -Fv "REPLICA_ALREADY_EXISTS" | grep -Fiv "Will not try to start it up" | \
          grep -Fv "Coordination::Exception" | grep -Fv "already contains some data and it does not look like Replicated database path"
-        sleep 0.0$RANDOM
+        sleep 0.$RANDOM
     done
 }
 
@@ -32,7 +32,7 @@ function drop_db()
         if [ -z "$database" ]; then continue; fi
         $CLICKHOUSE_CLIENT -n --query \
         "drop database if exists $database" 2>&1| grep -Fa "Exception: "
-        sleep 0.0$RANDOM
+        sleep 0.$RANDOM
     done
 }
 
@@ -44,7 +44,7 @@ function sync_db()
         if [ -z "$database" ]; then continue; fi
         $CLICKHOUSE_CLIENT --receive_timeout=1 -q \
         "system sync database replica $database" 2>&1| grep -Fa "Exception: " | grep -Fv TIMEOUT_EXCEEDED | grep -Fv "only with Replicated engine" | grep -Fv UNKNOWN_DATABASE
-        sleep 0.0$RANDOM
+        sleep 0.$RANDOM
     done
 }
 
@@ -57,7 +57,7 @@ function create_table()
         $CLICKHOUSE_CLIENT --distributed_ddl_task_timeout=0 -q \
         "create table $database.rmt_${RANDOM}_${RANDOM}_${RANDOM} (n int) engine=ReplicatedMergeTree order by tuple() -- suppress $CLICKHOUSE_TEST_ZOOKEEPER_PREFIX" \
         2>&1| grep -Fa "Exception: " | grep -Fv "Macro 'uuid' and empty arguments" | grep -Fv "Cannot enqueue query" | grep -Fv "ZooKeeper session expired" | grep -Fv UNKNOWN_DATABASE | grep -Fv TABLE_IS_DROPPED
-        sleep 0.0$RANDOM
+        sleep 0.$RANDOM
     done
 }
 
@@ -70,7 +70,7 @@ function alter_table()
         $CLICKHOUSE_CLIENT --distributed_ddl_task_timeout=0 -q \
         "alter table $table update n = n + (select max(n) from merge(REGEXP('${CLICKHOUSE_DATABASE}.*'), '.*')) where 1 settings allow_nondeterministic_mutations=1" \
         2>&1| grep -Fa "Exception: " | grep -Fv "Cannot enqueue query" | grep -Fv "ZooKeeper session expired" | grep -Fv UNKNOWN_DATABASE | grep -Fv UNKNOWN_TABLE | grep -Fv TABLE_IS_READ_ONLY | grep -Fv TABLE_IS_DROPPED | grep -Fv ABORTED | grep -Fv "Error while executing table function merge"
-        sleep 0.0$RANDOM
+        sleep 0.$RANDOM
     done
 }
 
@@ -85,9 +85,7 @@ function insert()
     done
 }
 
-
-
-TIMEOUT=15
+TIMEOUT=20
 
 create_db $TIMEOUT &
 sync_db $TIMEOUT &

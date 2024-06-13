@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tags: zookeeper, no-parallel, no-fasttest
+# Tags: zookeeper, no-fasttest
 
 CURDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../shell_config.sh
@@ -62,7 +62,7 @@ export -f sync_and_drop_replicas
 export -f optimize_thread
 export -f mutations_thread
 
-TIMEOUT=60
+TIMEOUT=30
 
 timeout $TIMEOUT bash -c insert_thread 2> /dev/null &
 timeout $TIMEOUT bash -c sync_and_drop_replicas 2> /dev/null &

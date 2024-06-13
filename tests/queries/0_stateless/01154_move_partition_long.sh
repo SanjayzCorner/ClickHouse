@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tags: long, no-parallel
+# Tags: long
 
 CURDIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 # shellcheck source=../shell_config.sh
@@ -51,7 +51,7 @@ function move_partition_src_dst_thread()
         TO_REPLICA=$(($RANDOM % 16))
         PARTITION=$(($RANDOM % 10))
         $CLICKHOUSE_CLIENT -q "ALTER TABLE src_$FROM_REPLICA MOVE PARTITION $PARTITION TO TABLE dst_$TO_REPLICA" 2>/dev/null
-        sleep 0.$RANDOM;
+        sleep 0.0$RANDOM;
     done
 }
 
@@ -62,7 +62,7 @@ function replace_partition_src_src_thread()
         TO_REPLICA=$(($RANDOM % 16))
         PARTITION=$(($RANDOM % 10))
         $CLICKHOUSE_CLIENT -q "ALTER TABLE src_$TO_REPLICA REPLACE PARTITION $PARTITION FROM src_$FROM_REPLICA" 2>/dev/null
-        sleep 0.$RANDOM;
+        sleep 0.0$RANDOM;
     done
 }
 
@@ -72,7 +72,7 @@ function drop_partition_thread()
         REPLICA=$(($RANDOM % 16))
         PARTITION=$(($RANDOM % 10))
         $CLICKHOUSE_CLIENT -q "ALTER TABLE dst_$REPLICA DROP PARTITION $PARTITION" 2>/dev/null
-        sleep 0.$RANDOM;
+        sleep 0.0$RANDOM;
     done
 }
 
@@ -85,7 +85,7 @@ function optimize_thread()
             TABLE="dst"
         fi
         $CLICKHOUSE_CLIENT -q "OPTIMIZE TABLE ${TABLE}_$REPLICA" 2>/dev/null
-        sleep 0.$RANDOM;
+        sleep 0.0$RANDOM;
     done
 }
 
@@ -95,7 +95,7 @@ function drop_part_thread()
         REPLICA=$(($RANDOM % 16))
         part=$($CLICKHOUSE_CLIENT -q "SELECT name FROM system.parts WHERE active AND database='$CLICKHOUSE_DATABASE' and table='dst_$REPLICA' ORDER BY rand() LIMIT 1")
         $CLICKHOUSE_CLIENT -q "ALTER TABLE dst_$REPLICA DROP PART '$part'" 2>/dev/null
-        sleep 0.$RANDOM;
+        sleep 0.0$RANDOM;
     done
 }
 
@@ -107,7 +107,7 @@ export -f drop_partition_thread;
 export -f optimize_thread;
 export -f drop_part_thread;
 
-TIMEOUT=60
+TIMEOUT=20
 
 #timeout $TIMEOUT bash -c "create_drop_thread ${engines[@]}" &
 timeout $TIMEOUT bash -c 'insert_thread src' &

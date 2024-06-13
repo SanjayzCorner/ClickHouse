@@ -1,6 +1,8 @@
-DROP DICTIONARY IF EXISTS system.dict_01129;
+-- Tags: no-parallel
 
-CREATE DICTIONARY IF NOT EXISTS system.dict_01129
+DROP DICTIONARY IF EXISTS system.dict1;
+
+CREATE DICTIONARY IF NOT EXISTS system.dict1
 (
     bytes_allocated UInt64,
     element_count Int32,
@@ -12,10 +14,10 @@ LIFETIME(0)
 LAYOUT(hashed());
 
 SELECT join_key,
-       toTimeZone(dictGetDateTime('system.dict_01129', 'loading_start_time', toUInt64(dict_key)), 'UTC') AS datetime
-FROM (select dictGetInt32('system.dict_01129', 'element_count', toUInt64(dict_key)) AS join_key, 1 AS dict_key) js1
+       toTimeZone(dictGetDateTime('system.dict1', 'loading_start_time', toUInt64(dict_key)), 'UTC') AS datetime
+FROM (select dictGetInt32('system.dict1', 'element_count', toUInt64(dict_key)) AS join_key, 1 AS dict_key) js1
 LEFT JOIN (SELECT toInt32(2) AS join_key) js2
 USING (join_key)
 WHERE now() >= datetime;
 
-DROP DICTIONARY IF EXISTS system.dict_01129;
+DROP DICTIONARY IF EXISTS system.dict1;
