@@ -1591,7 +1591,12 @@ class TestCase:
 
         # pylint:disable-next=consider-using-with; TODO: fix
         proc = Popen(command, shell=True, env=os.environ, start_new_session=True)
-        proc.wait(args.timeout)
+
+        try:
+            proc.wait(args.timeout)
+        except subprocess.TimeoutExpired:
+            # Whether the test timed out will be decided later
+            pass
 
         debug_log = ""
         if os.path.exists(self.testcase_args.debug_log_file):
