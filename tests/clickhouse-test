@@ -1591,11 +1591,7 @@ class TestCase:
 
         # pylint:disable-next=consider-using-with; TODO: fix
         proc = Popen(command, shell=True, env=os.environ, start_new_session=True)
-
-        while (
-            datetime.now() - start_time
-        ).total_seconds() < args.timeout and proc.poll() is None:
-            sleep(0.01)
+        proc.wait(args.timeout)
 
         debug_log = ""
         if os.path.exists(self.testcase_args.debug_log_file):
