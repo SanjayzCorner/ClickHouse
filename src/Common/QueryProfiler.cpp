@@ -92,16 +92,16 @@ namespace
         constexpr bool sanitizer = false;
 #endif
 
-        asynchronous_stack_unwinding = true;
-        if (sanitizer || 0 == sigsetjmp(asynchronous_stack_unwinding_signal_jump_buffer, 1))
-        {
+        //asynchronous_stack_unwinding = true;
+        //if (sanitizer || 0 == sigsetjmp(asynchronous_stack_unwinding_signal_jump_buffer, 1))
+        //{
             stack_trace.emplace(signal_context);
-        }
-        else
-        {
-            ProfileEvents::incrementNoTrace(ProfileEvents::QueryProfilerErrors);
-        }
-        asynchronous_stack_unwinding = false;
+        //}
+        //else
+        //{
+        //    ProfileEvents::incrementNoTrace(ProfileEvents::QueryProfilerErrors);
+        //}
+        //asynchronous_stack_unwinding = false;
 
         if (stack_trace)
             TraceSender::send(trace_type, *stack_trace, {});
